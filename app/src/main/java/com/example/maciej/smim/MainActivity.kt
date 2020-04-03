@@ -40,14 +40,20 @@ class MainActivity : AppCompatActivity() {
             field.setOnClickListener {
                 // It might be best to handle all of this within the Game class but can't tell for sure
                 val playerMark = game.getPlayerMark()
-                field.text = playerMark.symbol
-                field.setTextColor(playerMark.color)
-                game.switchTurn()
-                // This part is changing the display, so it can stay here. We might consider making a function out of it
-                currentScore = game.scoreCount
-                playerOneScoreView.text = currentScore[0].toString()
-                playerTwoScoreView.text = currentScore[1].toString()
-                currentPlayerNumberView.text = if (game.isPlayerOneTurn) "1" else "2"
+                if(field.text.equals("")) {
+                    field.text = playerMark.symbol
+                    field.setTextColor(playerMark.color)
+                    game.switchTurn()
+                    // This part is changing the display, so it can stay here. We might consider making a function out of it
+                    currentScore = game.scoreCount
+                    playerOneScoreView.text = currentScore[0].toString()
+                    playerTwoScoreView.text = currentScore[1].toString()
+                    currentPlayerNumberView.text = if (game.isPlayerOneTurn) "1" else "2"
+                    if(game.isBoardFull()){
+                        println("It's a draw!")
+                        game.resetBoard()
+                    }
+                }
             }
         }
     }
