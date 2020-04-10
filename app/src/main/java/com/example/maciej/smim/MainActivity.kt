@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         val currentPlayerNumberView = findViewById<TextView>(R.id.player_number)
 
         val board = findViewById<GridLayout>(R.id.board)
-        var game = Game(board)
+        var game = Game()
 
         var currentScore = game.scoreCount
         playerOneScoreView.text = currentScore[0].toString()
