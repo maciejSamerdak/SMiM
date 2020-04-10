@@ -1,9 +1,8 @@
 package com.example.maciej.smim
 
 import android.graphics.Color
-import android.widget.GridLayout
 
-open class Game(private val board: GridLayout) {
+open class Game {
     val scoreCount: IntArray = intArrayOf(0, 0)
     var isPlayerOneTurn: Boolean = false
     var playerMarks: Array<PlayerMark> = arrayOf(PlayerMark("X", Color.RED), PlayerMark("O", Color.BLUE))
