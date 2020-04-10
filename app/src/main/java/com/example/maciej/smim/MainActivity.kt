@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         val currentPlayerNumberView = findViewById<TextView>(R.id.player_number)
 
         val board = findViewById<GridLayout>(R.id.board)
-        var game = Game(board)
+        var game = Game()
 
         var currentScore = game.scoreCount
         playerOneScoreView.text = currentScore[0].toString()
@@ -49,12 +49,27 @@ class MainActivity : AppCompatActivity() {
                     playerOneScoreView.text = currentScore[0].toString()
                     playerTwoScoreView.text = currentScore[1].toString()
                     currentPlayerNumberView.text = if (game.isPlayerOneTurn) "1" else "2"
-                    if(game.isBoardFull()){
+                    if(isBoardFull(board)){
                         println("It's a draw!")
-                        game.resetBoard()
+                        resetBoard(board)
                     }
                 }
             }
+        }
+    }
+    fun isBoardFull(board:GridLayout): Boolean {
+        for ( x in 0 until board.childCount){
+            val child = board.getChildAt(x)
+            if((child as Button).text.equals(""))
+                return false
+        }
+        return true
+    }
+
+    fun resetBoard(board:GridLayout){
+        for ( x in 0 until board.childCount){
+            val child = board.getChildAt(x)
+            (child as Button).text = ""
         }
     }
 }
