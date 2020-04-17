@@ -14,7 +14,7 @@ class GameUnitTest {
 
     @Before
     fun setUp() {
-        this.game = Game()
+        this.game = Game(3,3)
     }
 
     @Test
@@ -54,6 +54,20 @@ class GameUnitTest {
         assertEquals(game.playerMarks[expectedPlayerMarkIndex], playerMark)
     }
 
+    @Test
+    @Parameters(method = "test_isBoardFull_Parameters")
+    fun test_isBoardFull(fields: Array<Array<String>>,expectedResult: Boolean){
+        game.refreshFields(fields)
+        assertEquals(expectedResult, game.isBoardFull())
+    }
+
+    @Test
+    fun test_resetBoard(){
+        game.refreshFields(arrayOf(arrayOf("x","o","o"),arrayOf("x","o","x"),arrayOf("o","x","o")))
+        game.resetBoard()
+        assertArrayEquals(arrayOf(arrayOf("","",""),arrayOf("","",""),arrayOf("","","")),game.fields)
+    }
+
     @SuppressWarnings("unused")
     fun test_updateScore_with_given_score_Parameters() = arrayOf(
         arrayOf(intArrayOf(0, 0), 1, 1),
@@ -70,4 +84,11 @@ class GameUnitTest {
 
     @SuppressWarnings("unused")
     fun test_getPlayerMark_Parameters() = arrayOf(arrayOf(true, 0), arrayOf(false, 1))
+
+    @SuppressWarnings("unused")
+    fun test_isBoardFull_Parameters() = arrayOf(
+        arrayOf(arrayOf(arrayOf("","",""),arrayOf("","",""),arrayOf("","","")),false),
+        arrayOf(arrayOf(arrayOf("x","o","o"),arrayOf("x","o","x"),arrayOf("o","x","o")),true),
+        arrayOf(arrayOf(arrayOf("x","","o"),arrayOf("o","x","o"),arrayOf("x","o","")),false)
+    )
 }
