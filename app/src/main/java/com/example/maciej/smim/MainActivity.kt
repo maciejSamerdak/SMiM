@@ -10,6 +10,8 @@ import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,8 +21,8 @@ class MainActivity : AppCompatActivity() {
         val currentPlayerNumberView = findViewById<TextView>(R.id.player_number)
 
         val board = findViewById<GridLayout>(R.id.board)
-        var game = Game()
 
+        var game = Game(board.rowCount,board.columnCount)
         var currentScore = game.scoreCount
         playerOneScoreView.text = currentScore[0].toString()
         playerTwoScoreView.text = currentScore[1].toString()
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity() {
                 val playerMark = game.getPlayerMark()
                 if(field.text.equals("")) {
                     field.text = playerMark.symbol
+                    game.refreshFields(boardToArray(board))
                     field.setTextColor(playerMark.color)
                     game.switchTurn()
                     // This part is changing the display, so it can stay here. We might consider making a function out of it
@@ -49,27 +52,31 @@ class MainActivity : AppCompatActivity() {
                     playerOneScoreView.text = currentScore[0].toString()
                     playerTwoScoreView.text = currentScore[1].toString()
                     currentPlayerNumberView.text = if (game.isPlayerOneTurn) "1" else "2"
-                    if(isBoardFull(board)){
+                    if(game.isBoardFull()){
                         println("It's a draw!")
-                        resetBoard(board)
+                        game.resetBoard()
+                        resetBoardView(board)
                     }
                 }
             }
         }
     }
-    fun isBoardFull(board:GridLayout): Boolean {
-        for ( x in 0 until board.childCount){
-            val child = board.getChildAt(x)
-            if((child as Button).text.equals(""))
-                return false
+
+    fun boardToArray(board: GridLayout): Array<Array<String>>{
+        var fields = Array(board.rowCount,{Array(board.columnCount,{""})})
+        for(i in 0 until board.rowCount){
+            for(j in 0 until board.columnCount){
+                fields[i][j] = (board.getChildAt(i*board.rowCount+j) as Button).text.toString()
+            }
         }
-        return true
+        return fields
     }
 
-    fun resetBoard(board:GridLayout){
+    fun resetBoardView(board: GridLayout){
         for ( x in 0 until board.childCount){
             val child = board.getChildAt(x)
             (child as Button).text = ""
         }
     }
+
 }
