@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                     game.refreshFields(boardToArray(board))
                     field.setTextColor(playerMark.color)
 
-                    if(game.checkFields(numberOfButton, 5,5 )){
+                    if(game.checkFields(numberOfButton)){
                         if(game.isPlayerOneTurn) game.updateScore(1)
                         else game.updateScore(2)
                         game.resetBoard()

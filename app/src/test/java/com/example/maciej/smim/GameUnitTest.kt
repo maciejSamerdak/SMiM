@@ -68,6 +68,13 @@ class GameUnitTest {
         assertArrayEquals(arrayOf(arrayOf("","",""),arrayOf("","",""),arrayOf("","","")),game.fields)
     }
 
+    @Test
+    @Parameters(method = "test_checkFields_Parameters")
+    fun test_checkFields(numberOfButton: Int, fields: Array<Array<String>>, expectedResult: Boolean){
+        game.refreshFields(fields)
+        assertEquals(game.checkFields(numberOfButton, 3), expectedResult)
+    }
+
     @SuppressWarnings("unused")
     fun test_updateScore_with_given_score_Parameters() = arrayOf(
         arrayOf(intArrayOf(0, 0), 1, 1),
@@ -90,5 +97,15 @@ class GameUnitTest {
         arrayOf(arrayOf(arrayOf("","",""),arrayOf("","",""),arrayOf("","","")),false),
         arrayOf(arrayOf(arrayOf("x","o","o"),arrayOf("x","o","x"),arrayOf("o","x","o")),true),
         arrayOf(arrayOf(arrayOf("x","","o"),arrayOf("o","x","o"),arrayOf("x","o","")),false)
+    )
+
+    @SuppressWarnings("unused")
+    fun test_checkFields_Parameters() = arrayOf(
+        arrayOf(8, arrayOf(arrayOf("O", "X", ""), arrayOf("", "O", "X"), arrayOf("", "", "O")), true),
+        arrayOf(6, arrayOf(arrayOf("", "X", "O"), arrayOf("", "O", "X"), arrayOf("O", "", "")), true),
+        arrayOf(2, arrayOf(arrayOf("", "X", "O"), arrayOf("", "X", "O"), arrayOf("", "", "O")), true),
+        arrayOf(7, arrayOf(arrayOf("", "O", "X"), arrayOf("", "O", "X"), arrayOf("", "O", "")), true),
+        arrayOf(0, arrayOf(arrayOf("O", "X", "O"), arrayOf("O", "X", "X"), arrayOf("O", "O", "X")), true),
+        arrayOf(4, arrayOf(arrayOf("O", "X", "X"), arrayOf("X", "O", "O"), arrayOf("X", "O", "X")), false)
     )
 }
