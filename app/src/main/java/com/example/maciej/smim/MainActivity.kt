@@ -37,26 +37,35 @@ class MainActivity : AppCompatActivity() {
             val field = Button(this)
             field.layoutParams = LinearLayout.LayoutParams(fieldPixelSize, fieldPixelSize)
             field.textSize = markPixelSize
+            field.tag = x
             board.addView(field)
 
             field.setOnClickListener {
                 // It might be best to handle all of this within the Game class but can't tell for sure
                 val playerMark = game.getPlayerMark()
+                val numberOfButton: Int = field.tag as Int
                 if(field.text.equals("")) {
                     field.text = playerMark.symbol
                     game.refreshFields(boardToArray(board))
                     field.setTextColor(playerMark.color)
+
+                    if(game.checkFields(numberOfButton)){
+                        if(game.isPlayerOneTurn) game.updateScore(1)
+                        else game.updateScore(2)
+                        game.resetBoard()
+                        resetBoardView(board)
+                    }
+                    else if(game.isBoardFull()){
+                        println("It's a draw!")
+                        game.resetBoard()
+                        resetBoardView(board)
+                    }
                     game.switchTurn()
                     // This part is changing the display, so it can stay here. We might consider making a function out of it
                     currentScore = game.scoreCount
                     playerOneScoreView.text = currentScore[0].toString()
                     playerTwoScoreView.text = currentScore[1].toString()
                     currentPlayerNumberView.text = if (game.isPlayerOneTurn) "1" else "2"
-                    if(game.isBoardFull()){
-                        println("It's a draw!")
-                        game.resetBoard()
-                        resetBoardView(board)
-                    }
                 }
             }
         }
