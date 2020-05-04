@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "442437389853",
+    "firebase_url": "https://smim-ef46d.firebaseio.com",
+    "project_id": "smim-ef46d",
+    "storage_bucket": "smim-ef46d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442437389853:android:e300cdb8b75fa3fe4000f4",
+        "android_client_info": {
+          "package_name": "com.example.maciej.smim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "442437389853-92n7j7ranh5vkrm0j96hsgturjrto0e6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.maciej.smim",
+            "certificate_hash": "20d9722e635e7e7a3e523386eeffce8b65283942"
+          }
+        },
+        {
+          "client_id": "442437389853-vthsr88d44c52i3pbl53uta7hif31ne3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT_aqJXgh8nckztBlVn0dWLK-Xf1uT9zg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442437389853-vthsr88d44c52i3pbl53uta7hif31ne3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
