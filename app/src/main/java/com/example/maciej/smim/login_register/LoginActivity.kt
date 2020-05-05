@@ -8,7 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.example.maciej.smim.MainActivity
+import com.example.maciej.smim.HotseatGameActivity
 import com.example.maciej.smim.MenuActivity
 import com.example.maciej.smim.R
 import com.google.firebase.auth.FirebaseAuth
@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance()
         if (auth.currentUser != null) {
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            startActivity(Intent(this@LoginActivity, HotseatGameActivity::class.java))
             finish()
         }
 
@@ -54,16 +54,12 @@ class LoginActivity : AppCompatActivity() {
                 val email = inputEmail!!.text.toString()
                 val password = inputPassword!!.text.toString()
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(
-                        applicationContext,
-                        "Enter email address!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(applicationContext, "Enter email address!", Toast.LENGTH_SHORT).show()
                     return
                 }
                 if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(applicationContext, "Enter password!", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(applicationContext, "Enter password!", Toast.LENGTH_SHORT
+                    ).show()
                     return
                 }
 
@@ -80,9 +76,7 @@ class LoginActivity : AppCompatActivity() {
                             if (password.length < 6) {
                                 inputPassword!!.error = "Password too short"
                             } else {
-                                Toast.makeText(
-                                    this@LoginActivity,
-                                    "Authentication failed",
+                                Toast.makeText(this@LoginActivity, "Authentication failed",
                                     Toast.LENGTH_LONG
                                 ).show()
                             }

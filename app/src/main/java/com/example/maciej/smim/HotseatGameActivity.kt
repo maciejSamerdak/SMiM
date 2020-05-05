@@ -3,18 +3,18 @@ package com.example.maciej.smim
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.widget.Button
-import android.widget.GridLayout
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
-class MainActivity : AppCompatActivity() {
+class HotseatGameActivity : AppCompatActivity() {
 
-
+    private lateinit var auth: FirebaseAuth
+    private lateinit var user: FirebaseUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_hotseat_game)
 
         val playerOneScoreView = findViewById<TextView>(R.id.player_1_score)
         val playerTwoScoreView = findViewById<TextView>(R.id.player_2_score)
@@ -56,7 +56,8 @@ class MainActivity : AppCompatActivity() {
                         resetBoardView(board)
                     }
                     else if(game.isBoardFull()){
-                        println("It's a draw!")
+                        Toast.makeText(this@HotseatGameActivity,
+                            "It's a draw.", Toast.LENGTH_SHORT).show()
                         game.resetBoard()
                         resetBoardView(board)
                     }
@@ -71,8 +72,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun boardToArray(board: GridLayout): Array<Array<String>>{
-        var fields = Array(board.rowCount,{Array(board.columnCount,{""})})
+    private fun boardToArray(board: GridLayout): Array<Array<String>>{
+        var fields = Array(board.rowCount) {Array(board.columnCount) {""} }
         for(i in 0 until board.rowCount){
             for(j in 0 until board.columnCount){
                 fields[i][j] = (board.getChildAt(i*board.rowCount+j) as Button).text.toString()
@@ -81,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         return fields
     }
 
-    fun resetBoardView(board: GridLayout){
+    private fun resetBoardView(board: GridLayout){
         for ( x in 0 until board.childCount){
             val child = board.getChildAt(x)
             (child as Button).text = ""
