@@ -8,11 +8,8 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.*
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 
-class HotseatGameActivity : AppCompatActivity() {
+class MultiplayerGameActivity : AppCompatActivity() {
 
     private lateinit var game: Game
     private lateinit var playerOneScoreView: TextView
@@ -22,12 +19,10 @@ class HotseatGameActivity : AppCompatActivity() {
     private lateinit var confirmationButton: Button
     private var lastPickedField: Int = -1
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) { //TODO multiplayer
         super.onCreate(savedInstanceState)
         initView()
-
         game = Game(board.rowCount,board.columnCount)
-
         refreshView()
         changeButtonState(confirmationButton)
 
@@ -35,6 +30,9 @@ class HotseatGameActivity : AppCompatActivity() {
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         val fieldPixelSize = displayMetrics.widthPixels / board.columnCount
         val markPixelSize = fieldPixelSize/4.5f
+
+        val extras = intent.extras
+        var username2 = extras.get("friend")
 
         for ( x in 0 until board.columnCount * board.rowCount) {
             val field = Button(this)
@@ -115,7 +113,7 @@ class HotseatGameActivity : AppCompatActivity() {
     }
 
     private fun initView(){
-        setContentView(R.layout.activity_hotseat_game)
+        setContentView(R.layout.activity_multiplayer_game)
 
         playerOneScoreView = findViewById(R.id.player_1_score)
         playerTwoScoreView = findViewById(R.id.player_2_score)

@@ -10,9 +10,9 @@
             android:id="@+id/multiplayerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="100dp"
             android:text="New multiplayer game"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,9 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="New hotseat game"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/multiplayerButton" />
+            app:layout_constraintStart_toStartOf="@+id/multiplayerButton"
+            app:layout_constraintTop_toBottomOf="@+id/friendsName" />
 
     <Button
             android:id="@+id/scoreboardButton"
@@ -32,8 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Scoreboard"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/hotseatButton"
             app:layout_constraintTop_toBottomOf="@+id/hotseatButton" />
 
     <Button
@@ -42,9 +40,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="QUIT"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scoreboardButton" />
+            app:layout_constraintStart_toStartOf="@+id/logoutButton"
+            app:layout_constraintTop_toBottomOf="@+id/logoutButton" />
 
     <Button
             android:id="@+id/logoutButton"
@@ -52,7 +49,62 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Log out"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/scoreboardButton"
             app:layout_constraintTop_toBottomOf="@+id/scoreboardButton" />
+
+    <EditText
+            android:id="@+id/friendsName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name"
+            app:layout_constraintStart_toStartOf="@+id/multiplayerButton"
+            app:layout_constraintTop_toBottomOf="@+id/multiplayerButton" />
+    <LinearLayout
+            android:id="@+id/invitationView"
+            android:layout_width="379dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="24dp"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+
+        <TextView
+                android:id="@+id/textView"
+                android:layout_width="82dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="invites you to the game"
+                android:textSize="16sp" />
+
+        <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text=" invites You to the game"/>
+
+        <ImageButton
+                android:id="@+id/cancelInvitation"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/ic_delete" />
+
+        <ImageButton
+                android:id="@+id/acceptInvitation"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/ic_input_add" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

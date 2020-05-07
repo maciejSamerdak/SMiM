@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance()
         if (auth.currentUser != null) {
-            startActivity(Intent(this@LoginActivity, HotseatGameActivity::class.java))
+            startActivity(Intent(this@LoginActivity, MenuActivity::class.java))
             finish()
         }
 
