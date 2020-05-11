@@ -6,7 +6,7 @@ open class Game(numberOfRows: Int, numberOfColumns: Int) {
     val scoreCount: IntArray = intArrayOf(0, 0)
     var isPlayerOneTurn: Boolean = false
     var playerMarks: Array<PlayerMark> = arrayOf(PlayerMark("X", Color.RED), PlayerMark("O", Color.BLUE))
-    var fields : Array<Array<String>> = Array(numberOfRows,{Array(numberOfColumns,{""})})
+    var fields : Array<Array<String>> = Array(numberOfRows) {Array(numberOfColumns) {""} }
 
     fun updateScore(player: Int, score:Int=1) {
         scoreCount[player - 1] += score

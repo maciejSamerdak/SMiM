@@ -19,7 +19,7 @@ class ResetPasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password)
-        inputEmail = findViewById<View>(R.id.email) as EditText
+        inputEmail = findViewById<View>(R.id.friendsName) as EditText
         btnReset = findViewById<View>(R.id.btn_reset_password) as Button
         btnBack = findViewById<View>(R.id.btn_back) as Button
         auth = FirebaseAuth.getInstance()

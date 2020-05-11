@@ -10,7 +10,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-
+        <activity android:name=".MultiplayerGameActivity"></activity>
         <activity android:name=".login_register.SignupActivity" />
         <activity android:name=".login_register.ResetPasswordActivity" />
         <activity android:name=".login_register.LoginActivity">
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MenuActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".HotseatGameActivity" />
     </application>
 
 </manifest>

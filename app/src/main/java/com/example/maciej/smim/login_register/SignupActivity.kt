@@ -8,27 +8,34 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.example.maciej.smim.MainActivity
+import com.example.maciej.smim.MenuActivity
 import com.example.maciej.smim.R
+import com.example.maciej.smim.users.User
+import com.example.maciej.smim.users.UserService
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 
 
 class SignupActivity : AppCompatActivity() {
+    private lateinit var auth: FirebaseAuth
+    private lateinit var user: FirebaseUser
     private var inputEmail: EditText? = null
+    private var inputUsername: EditText? = null
     private var inputPassword: EditText? = null
     private var btnSignIn: Button? = null
     private var btnSignUp: Button? = null
     private var btnResetPassword: Button? = null
-    private lateinit var auth: FirebaseAuth
+    private var userService = UserService()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
-        //Get Firebase auth instance
         auth = FirebaseAuth.getInstance()
         btnSignIn = findViewById<View>(R.id.sign_in_button) as Button
         btnSignUp = findViewById<View>(R.id.sign_up_button) as Button
         inputEmail = findViewById<View>(R.id.email) as EditText
+        inputUsername = findViewById<View>(R.id.friendsName) as EditText
         inputPassword = findViewById<View>(R.id.password) as EditText
         btnResetPassword = findViewById<View>(R.id.btn_reset_password) as Button
 
@@ -40,11 +47,9 @@ class SignupActivity : AppCompatActivity() {
             override fun onClick(v: View?) {
                 val email = inputEmail!!.text.toString().trim { it <= ' ' }
                 val password = inputPassword!!.text.toString().trim { it <= ' ' }
+                val username = inputUsername!!.text.toString().trim { it <= ' ' }
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(
-                        applicationContext,
-                        "Enter email address!",
-                        Toast.LENGTH_SHORT
+                    Toast.makeText(applicationContext, "Enter email address!", Toast.LENGTH_SHORT
                     ).show()
                     return
                 }
@@ -81,10 +86,15 @@ class SignupActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
+                            val profileUpdates = UserProfileChangeRequest.Builder()
+                                    .setDisplayName(inputUsername!!.text.toString()).build()
+                            auth.currentUser?.updateProfile(profileUpdates)
+                            var user = User(auth.currentUser?.uid,email,username)
+                            userService.addUserToDB(user)
                             startActivity(
                                 Intent(
                                     this@SignupActivity,
-                                    MainActivity::class.java
+                                    MenuActivity::class.java
                                 )
                             )
                             finish()
