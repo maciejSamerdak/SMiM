@@ -75,6 +75,7 @@ class MenuActivity : AppCompatActivity() {
                 MultiplayerGameActivity::class.java
             )
             intent.putExtra("friend", invitingPerson!!.text.toString())
+            intent.putExtra("playerNumber", 2)
 
             if (currentUserName != null) {
                 db.getReference("invitations").child(currentUserName)
@@ -105,9 +106,10 @@ class MenuActivity : AppCompatActivity() {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         if (dataSnapshot.child("response").value != null) {
                             if (dataSnapshot.child("response").value == true) {
-                                //startactivitytogether
                                 val intent = Intent(applicationContext, MultiplayerGameActivity::class.java)
                                 intent.putExtra("friend", friendsName)
+                                intent.putExtra("playerNumber", 1)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 db.getReference("responses")
                                     .child(currentUserName).removeValue()
                                 db.getReference("invitations").child(friendsName)
