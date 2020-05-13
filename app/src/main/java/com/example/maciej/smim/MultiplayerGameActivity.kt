@@ -30,35 +30,12 @@ class MultiplayerGameActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initView()
-        game = Game(board.rowCount,board.columnCount)
-        if (currentUserName != null) {
-            refCurrentGame = db.getReference("users").child(currentUserName).child("currentGame")
-            refCurrentGame.removeValue()
-        }
-        val whichPlayerTurn: Int = if(game.isPlayerOneTurn){
-            1
-        } else
-            2
-        refCurrentGame.child("move").child("whichPlayerTurn").setValue(whichPlayerTurn)
-        refCurrentGame.child("score").setValue(0)
-        refreshView()
-        changeButtonState(confirmationButton)
+        initViewAndDB()
 
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         val fieldPixelSize = displayMetrics.widthPixels / board.columnCount
         val markPixelSize = fieldPixelSize/4.5f
-
-        val extras = intent.extras
-        username2 = extras.get("friend") as String
-        playerNumber = extras.get("playerNumber") as Int
-        player.text = "Player $playerNumber"
-        Toast.makeText(
-            applicationContext,
-            "username2 = " + username2 + "playerNumber = " + playerNumber,
-            Toast.LENGTH_SHORT
-        ).show()
 
         for ( x in 0 until board.columnCount * board.rowCount) {
             val field = Button(this)
@@ -72,6 +49,8 @@ class MultiplayerGameActivity : AppCompatActivity() {
                 placeMark(field, x)
             }
         }
+
+        //place mark which was added by another player
         refCurrentGame.child("move").addValueEventListener(object: ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
                 refreshView()
@@ -86,18 +65,15 @@ class MultiplayerGameActivity : AppCompatActivity() {
                         button.setTextColor(game.playerMarks[0].color)
                     }
 
-                    Toast.makeText(
-                        applicationContext,
-                        "Your turn.",
-                        Toast.LENGTH_SHORT
+                    Toast.makeText(applicationContext, "Your turn.", Toast.LENGTH_SHORT
                     ).show()
                 }
             }
-
             override fun onCancelled(p0: DatabaseError) {}
         })
-        db.getReference("users").child(username2).child("currentGame").child("score").addValueEventListener(object: ValueEventListener{
 
+        //reset board and score when another player get point
+        db.getReference("users").child(username2).child("currentGame").child("score").addValueEventListener(object: ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
                 game.resetBoard()
                 resetBoardView()
@@ -152,7 +128,6 @@ class MultiplayerGameActivity : AppCompatActivity() {
 
             override fun onCancelled(p0: DatabaseError) {}
         })
-
     }
 
     private fun boardToArray(): Array<Array<String>>{
@@ -233,7 +208,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
         refCurrentGame.child("score").setValue(game.scoreCount[playerNumber-1])
     }
 
-    private fun initView(){
+    private fun initViewAndDB(){
         setContentView(R.layout.activity_multiplayer_game)
 
         player = findViewById(R.id.player)
@@ -241,8 +216,25 @@ class MultiplayerGameActivity : AppCompatActivity() {
         playerTwoScoreView = findViewById(R.id.player_2_score)
         currentPlayerNumberView = findViewById(R.id.player_number)
         confirmationButton = findViewById(R.id.confirm)
-
         board = findViewById(R.id.board)
+
+        game = Game(board.rowCount,board.columnCount)
+        if (currentUserName != null) {
+            refCurrentGame = db.getReference("users").child(currentUserName).child("currentGame")
+            refCurrentGame.removeValue()
+        }
+        val whichPlayerTurn: Int = if(game.isPlayerOneTurn){
+            1
+        } else
+            2
+        refCurrentGame.child("move").child("whichPlayerTurn").setValue(whichPlayerTurn)
+        refCurrentGame.child("score").setValue(0)
+        refreshView()
+        changeButtonState(confirmationButton)
+        val extras = intent.extras
+        username2 = extras.get("friend") as String
+        playerNumber = extras.get("playerNumber") as Int
+        player.text = "Player $playerNumber"
     }
 
     class Move{
