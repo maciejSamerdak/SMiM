@@ -58,6 +58,11 @@ class MenuActivity : AppCompatActivity() {
 
         newHotseatGameButton.setOnClickListener { startActivity(intent)}
 
+        scoreBoardButton.setOnClickListener {
+            val intent = Intent(this@MenuActivity, ScoreboardActivity::class.java)
+            startActivity(intent)
+        }
+
         logoutButton.setOnClickListener {
             auth.signOut()
         }

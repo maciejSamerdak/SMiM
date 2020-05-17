@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".MenuActivity" />
         <activity android:name=".HotseatGameActivity" />
+        <activity android:name=".ScoreboardActivity" />
     </application>
 
 </manifest>
