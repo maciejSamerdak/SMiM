@@ -26,11 +26,15 @@ class MultiplayerGameActivity : AppCompatActivity() {
     private val currentUserName = currentUser?.displayName
     private lateinit var refCurrentGame : DatabaseReference
     private lateinit var username2: String
+    private var playerScoreboard: Array<Int> = Array(3) {0}
+//    private var initializingMultiplayer: Int = -2
+    private var initializingMultiplayer: Boolean = true
     private var playerNumber by Delegates.notNull<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViewAndDB()
+        getScoreboard()
 
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
@@ -59,12 +63,20 @@ class MultiplayerGameActivity : AppCompatActivity() {
                     if (playerNumber == 1) {
                         button.text = game.playerMarks[1].symbol
                         button.setTextColor(game.playerMarks[1].color)
+                        game.refreshFields(boardToArray())
                     }
                     else{
                         button.text = game.playerMarks[0].symbol
                         button.setTextColor(game.playerMarks[0].color)
+                        game.refreshFields(boardToArray())
                     }
-
+                    val temp: Int = if (playerNumber == 1) 2 else 1
+                    if(game.isBoardFull() && !game.checkFields((p0.child("index").value as Long).toInt(), temp)){
+                        println("It's a draw!")
+                        game.resetBoard()
+                        resetBoardView()
+                        db.getReference("users").child(currentUserName.toString()).child("draws").setValue(playerScoreboard[1] + 1)
+                    }
                     Toast.makeText(applicationContext, "Your turn.", Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -78,6 +90,16 @@ class MultiplayerGameActivity : AppCompatActivity() {
                 game.resetBoard()
                 resetBoardView()
                 refreshView()
+                println("RESET")
+//                if (initializingMultiplayer > 0){
+
+                if (p0.value != 0.toLong() && p0.value != null){
+                    Toast.makeText(applicationContext, p0.value.toString(), Toast.LENGTH_SHORT
+                    ).show()
+                    db.getReference("users").child(currentUserName.toString()).child("loses").setValue(playerScoreboard[2] + 1)
+                }
+
+
             }
             override fun onCancelled(p0: DatabaseError) {}
         })
@@ -154,11 +176,13 @@ class MultiplayerGameActivity : AppCompatActivity() {
             updateScore()
             game.resetBoard()
             resetBoardView()
+            db.getReference("users").child(currentUserName.toString()).child("wins").setValue(playerScoreboard[0] + 1)
         }
         else if(game.isBoardFull()){
             println("It's a draw!")
             game.resetBoard()
             resetBoardView()
+            db.getReference("users").child(currentUserName.toString()).child("draws").setValue(playerScoreboard[1] + 1)
         }
         switchTurn()
         changeButtonState(view as Button)
@@ -173,27 +197,21 @@ class MultiplayerGameActivity : AppCompatActivity() {
         refCurrentGame.child("move").child("whichPlayerTurn").addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
                 if((p0.value as Long).toInt() == 1){
-                    val move1 = Move()
-                    val move2 = Move()
-                    move1.index = lastPickedField
-                    move1.whichPlayerTurn = 2
-                    refCurrentGame.child("move").setValue(move1)
-                    move2.index = lastPickedField
-                    move2.whichPlayerTurn = 2
-                    db.getReference("users").child(username2).child("currentGame").child("move").setValue(move2)
+                    val move = Move()
+                    move.index = lastPickedField
+                    move.whichPlayerTurn = 2
+                    refCurrentGame.child("move").setValue(move)
+                    db.getReference("users").child(username2).child("currentGame").child("move").setValue(move)
                     game.isPlayerOneTurn = false;
                     refreshView()
                     lastPickedField = -1
                 }
                 else{
-                    val move1 = Move()
-                    val move2 = Move()
-                    move1.index = lastPickedField
-                    move1.whichPlayerTurn = 1
-                    refCurrentGame.child("move").setValue(move1)
-                    move2.index = lastPickedField
-                    move2.whichPlayerTurn = 1
-                    db.getReference("users").child(username2).child("currentGame").child("move").setValue(move2)
+                    val move = Move()
+                    move.index = lastPickedField
+                    move.whichPlayerTurn = 1
+                    refCurrentGame.child("move").setValue(move)
+                    db.getReference("users").child(username2).child("currentGame").child("move").setValue(move)
                     game.isPlayerOneTurn = true
                     refreshView()
                     lastPickedField = -1
@@ -235,6 +253,18 @@ class MultiplayerGameActivity : AppCompatActivity() {
         username2 = extras.get("friend") as String
         playerNumber = extras.get("playerNumber") as Int
         player.text = "Player $playerNumber"
+    }
+
+    private fun getScoreboard(){
+        db.getReference("users").addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                playerScoreboard[0] = (dataSnapshot.child(currentUserName.toString()).child("wins").value as Long).toInt()
+                playerScoreboard[1] = (dataSnapshot.child(currentUserName.toString()).child("draws").value as Long).toInt()
+                playerScoreboard[2] = (dataSnapshot.child(currentUserName.toString()).child("loses").value as Long).toInt()
+            }
+            override fun onCancelled(p0: DatabaseError) {}
+
+        })
     }
 
     class Move{

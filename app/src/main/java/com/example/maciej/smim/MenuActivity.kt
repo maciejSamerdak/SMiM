@@ -41,7 +41,7 @@ class MenuActivity : AppCompatActivity() {
             val friendsName = friendName.text.toString().trim { it <= ' ' }
             if(TextUtils.isEmpty(friendsName)){
                 Toast.makeText(applicationContext,
-                    "You have to write email of user you want to play with",
+                    "You have to write name of user you want to play with",
                     Toast.LENGTH_LONG).show()
             }
             else if(userService.findUserByName(friendsName) != null){
