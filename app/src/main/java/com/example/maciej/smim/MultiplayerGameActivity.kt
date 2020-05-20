@@ -27,7 +27,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
     private lateinit var refCurrentGame : DatabaseReference
     private lateinit var username2: String
     private var playerScoreboard: Array<Int> = Array(3) {0}
-//    private var initializingMultiplayer: Int = -2
+    private var lostGame: Boolean = false
     private var initializingMultiplayer: Boolean = true
     private var playerNumber by Delegates.notNull<Int>()
 
@@ -60,15 +60,19 @@ class MultiplayerGameActivity : AppCompatActivity() {
                 refreshView()
                 if(p0.child("whichPlayerTurn").exists() && p0.child("index").exists() && (p0.child("whichPlayerTurn").value as Long).toInt() == playerNumber) {
                     val button = board.getChildAt((p0.child("index").value as Long).toInt()) as Button
-                    if (playerNumber == 1) {
-                        button.text = game.playerMarks[1].symbol
-                        button.setTextColor(game.playerMarks[1].color)
-                        game.refreshFields(boardToArray())
+                    if (!lostGame) {
+                        if (playerNumber == 1) {
+                            button.text = game.playerMarks[1].symbol
+                            button.setTextColor(game.playerMarks[1].color)
+                            game.refreshFields(boardToArray())
+                        } else {
+                            button.text = game.playerMarks[0].symbol
+                            button.setTextColor(game.playerMarks[0].color)
+                            game.refreshFields(boardToArray())
+                        }
                     }
                     else{
-                        button.text = game.playerMarks[0].symbol
-                        button.setTextColor(game.playerMarks[0].color)
-                        game.refreshFields(boardToArray())
+                        lostGame = false
                     }
                     val temp: Int = if (playerNumber == 1) 2 else 1
                     if(game.isBoardFull() && !game.checkFields((p0.child("index").value as Long).toInt(), temp)){
@@ -90,13 +94,10 @@ class MultiplayerGameActivity : AppCompatActivity() {
                 game.resetBoard()
                 resetBoardView()
                 refreshView()
-                println("RESET")
-//                if (initializingMultiplayer > 0){
 
                 if (p0.value != 0.toLong() && p0.value != null){
-                    Toast.makeText(applicationContext, p0.value.toString(), Toast.LENGTH_SHORT
-                    ).show()
                     db.getReference("users").child(currentUserName.toString()).child("loses").setValue(playerScoreboard[2] + 1)
+                    lostGame = true
                 }
 
 
