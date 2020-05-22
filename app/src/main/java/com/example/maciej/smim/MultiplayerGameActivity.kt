@@ -54,53 +54,41 @@ class MultiplayerGameActivity : AppCompatActivity() {
             }
         }
 
+        if(playerNumber == 1)
+            freeze()
         //place mark which was added by another player
         refCurrentGame.child("move").addValueEventListener(object: ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
                 refreshView()
                 if(p0.child("whichPlayerTurn").exists() && p0.child("index").exists() && (p0.child("whichPlayerTurn").value as Long).toInt() == playerNumber) {
                     val button = board.getChildAt((p0.child("index").value as Long).toInt()) as Button
-                    if (!lostGame) {
-                        if (playerNumber == 1) {
-                            button.text = game.playerMarks[1].symbol
-                            button.setTextColor(game.playerMarks[1].color)
-                            game.refreshFields(boardToArray())
-                        } else {
-                            button.text = game.playerMarks[0].symbol
-                            button.setTextColor(game.playerMarks[0].color)
-                            game.refreshFields(boardToArray())
-                        }
-                    }
-                    else{
-                        lostGame = false
+                    if (playerNumber == 1) {
+                        button.text = game.playerMarks[1].symbol
+                        button.setTextColor(game.playerMarks[1].color)
+                        game.refreshFields(boardToArray())
+                    } else {
+                        button.text = game.playerMarks[0].symbol
+                        button.setTextColor(game.playerMarks[0].color)
+                        game.refreshFields(boardToArray())
                     }
                     val temp: Int = if (playerNumber == 1) 2 else 1
-                    if(game.isBoardFull() && !game.checkFields((p0.child("index").value as Long).toInt(), temp)){
+                    if (game.checkFields((p0.child("index").value as Long).toInt(), temp, 5)){
+                        game.resetBoard()
+                        resetBoardView()
+                        playerScoreboard[2] += 1
+                        db.getReference("users").child(currentUserName.toString()).child("loses").setValue(playerScoreboard[2])
+                    }
+                    else if(game.isBoardFull()){
                         println("It's a draw!")
                         game.resetBoard()
                         resetBoardView()
-                        db.getReference("users").child(currentUserName.toString()).child("draws").setValue(playerScoreboard[1] + 1)
+                        playerScoreboard[1] += 1
+                        db.getReference("users").child(currentUserName.toString()).child("draws").setValue(playerScoreboard[1])
                     }
                     Toast.makeText(applicationContext, "Your turn.", Toast.LENGTH_SHORT
                     ).show()
+                    unfreeze()
                 }
-            }
-            override fun onCancelled(p0: DatabaseError) {}
-        })
-
-        //reset board and score when another player get point
-        db.getReference("users").child(username2).child("currentGame").child("score").addValueEventListener(object: ValueEventListener{
-            override fun onDataChange(p0: DataSnapshot) {
-                game.resetBoard()
-                resetBoardView()
-                refreshView()
-
-                if (p0.value != 0.toLong() && p0.value != null){
-                    db.getReference("users").child(currentUserName.toString()).child("loses").setValue(playerScoreboard[2] + 1)
-                    lostGame = true
-                }
-
-
             }
             override fun onCancelled(p0: DatabaseError) {}
         })
@@ -177,16 +165,19 @@ class MultiplayerGameActivity : AppCompatActivity() {
             updateScore()
             game.resetBoard()
             resetBoardView()
-            db.getReference("users").child(currentUserName.toString()).child("wins").setValue(playerScoreboard[0] + 1)
+            playerScoreboard[0] += 1
+            db.getReference("users").child(currentUserName.toString()).child("wins").setValue(playerScoreboard[0])
         }
         else if(game.isBoardFull()){
             println("It's a draw!")
             game.resetBoard()
             resetBoardView()
-            db.getReference("users").child(currentUserName.toString()).child("draws").setValue(playerScoreboard[1] + 1)
+            playerScoreboard[1] += 1
+            db.getReference("users").child(currentUserName.toString()).child("draws").setValue(playerScoreboard[1])
         }
         switchTurn()
         changeButtonState(view as Button)
+        freeze()
     }
 
     private fun changeButtonState(button: Button){
@@ -266,6 +257,18 @@ class MultiplayerGameActivity : AppCompatActivity() {
             override fun onCancelled(p0: DatabaseError) {}
 
         })
+    }
+
+    private fun freeze(){
+        for(x in 0 until board.childCount){
+            board.getChildAt(x).isEnabled = false
+        }
+    }
+
+    private fun unfreeze(){
+        for(x in 0 until board.childCount){
+            board.getChildAt(x).isEnabled = true
+        }
     }
 
     class Move{

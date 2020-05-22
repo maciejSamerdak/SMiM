@@ -44,6 +44,10 @@ class MenuActivity : AppCompatActivity() {
                     "You have to write name of user you want to play with",
                     Toast.LENGTH_LONG).show()
             }
+            else if(friendsName == currentUserName)
+                Toast.makeText(applicationContext,
+                    "You can't play with yourself",
+                    Toast.LENGTH_LONG).show()
             else if(userService.findUserByName(friendsName) != null){
 
                 Toast.makeText(applicationContext, "Invitation sent.", Toast.LENGTH_SHORT).show()
