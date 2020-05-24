@@ -43,7 +43,7 @@ open class Game(numberOfRows: Int, numberOfColumns: Int) {
         fields = fieldsFromBoard
     }
 
-    fun checkFields(numberOfButton: Int, toWin: Int = 5): Boolean{
+    fun checkFields(numberOfButton: Int, playerNumber: Int = -1, toWin: Int = 5): Boolean{
         val numberOfRows: Int = fields.size
         val numberOfColumns: Int = fields[0].size
         val columnNumber: Int = numberOfButton % numberOfRows
@@ -55,7 +55,11 @@ open class Game(numberOfRows: Int, numberOfColumns: Int) {
 
         //horizontally
         var counter: Int = 0
-        val mark = getPlayerMark().symbol
+        var mark = getPlayerMark().symbol
+        if(playerNumber != -1){
+            mark = playerMarks[playerNumber-1].symbol
+        }
+
 
         for(i in 0 until numberOfColumns){
             if(fields[rowNumber][i] == mark) counter += 1

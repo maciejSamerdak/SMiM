@@ -58,8 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:ems="10"
+            android:hint="Name"
             android:inputType="textPersonName"
-            android:text="Name"
             app:layout_constraintStart_toStartOf="@+id/multiplayerButton"
             app:layout_constraintTop_toBottomOf="@+id/multiplayerButton" />
     <LinearLayout

@@ -41,9 +41,13 @@ class MenuActivity : AppCompatActivity() {
             val friendsName = friendName.text.toString().trim { it <= ' ' }
             if(TextUtils.isEmpty(friendsName)){
                 Toast.makeText(applicationContext,
-                    "You have to write email of user you want to play with",
+                    "You have to write name of user you want to play with",
                     Toast.LENGTH_LONG).show()
             }
+            else if(friendsName == currentUserName)
+                Toast.makeText(applicationContext,
+                    "You can't play with yourself",
+                    Toast.LENGTH_LONG).show()
             else if(userService.findUserByName(friendsName) != null){
 
                 Toast.makeText(applicationContext, "Invitation sent.", Toast.LENGTH_SHORT).show()
@@ -57,6 +61,11 @@ class MenuActivity : AppCompatActivity() {
         }
 
         newHotseatGameButton.setOnClickListener { startActivity(intent)}
+
+        scoreBoardButton.setOnClickListener {
+            val intent = Intent(this@MenuActivity, ScoreboardActivity::class.java)
+            startActivity(intent)
+        }
 
         logoutButton.setOnClickListener {
             auth.signOut()
@@ -75,6 +84,7 @@ class MenuActivity : AppCompatActivity() {
                 MultiplayerGameActivity::class.java
             )
             intent.putExtra("friend", invitingPerson!!.text.toString())
+            intent.putExtra("playerNumber", 2)
 
             if (currentUserName != null) {
                 db.getReference("invitations").child(currentUserName)
@@ -105,9 +115,10 @@ class MenuActivity : AppCompatActivity() {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         if (dataSnapshot.child("response").value != null) {
                             if (dataSnapshot.child("response").value == true) {
-                                //startactivitytogether
                                 val intent = Intent(applicationContext, MultiplayerGameActivity::class.java)
                                 intent.putExtra("friend", friendsName)
+                                intent.putExtra("playerNumber", 1)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 db.getReference("responses")
                                     .child(currentUserName).removeValue()
                                 db.getReference("invitations").child(friendsName)
