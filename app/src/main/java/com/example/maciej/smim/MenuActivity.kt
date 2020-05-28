@@ -7,10 +7,12 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
+import com.example.maciej.smim.login_register.LoginActivity
 import com.example.maciej.smim.users.UserService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import java.util.ArrayList
 
 
 class MenuActivity : AppCompatActivity() {
@@ -23,11 +25,11 @@ class MenuActivity : AppCompatActivity() {
     private var acceptInvitation: ImageButton? = null
     private  var cancelInvitation:ImageButton? = null
     private var invitingPerson: TextView? = null
+    private var someInvitations: ArrayList<String> = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
-
         val newHotseatGameButton = findViewById<View>(R.id.hotseatButton) as Button
         val newMultiplayerGameButton = findViewById<View>(R.id.multiplayerButton) as Button
         val friendName = findViewById<View>(R.id.friendsName) as EditText
@@ -36,6 +38,13 @@ class MenuActivity : AppCompatActivity() {
         val logoutButton = findViewById<View>(R.id.logoutButton) as Button
 
         val intent =  Intent(this, HotseatGameActivity::class.java)
+
+        if (savedInstanceState != null){
+            someInvitations = savedInstanceState.getStringArrayList("someInvitations")
+            for (i in someInvitations.indices){
+                checkResponse(someInvitations[i])
+            }
+        }
 
         newMultiplayerGameButton.setOnClickListener {
             val friendsName = friendName.text.toString().trim { it <= ' ' }
@@ -58,6 +67,7 @@ class MenuActivity : AppCompatActivity() {
             else
                 Toast.makeText(applicationContext, "There is no user with such name.", Toast.LENGTH_SHORT).show()
             checkResponse(friendsName)
+            someInvitations.add(friendsName)
         }
 
         newHotseatGameButton.setOnClickListener { startActivity(intent)}
@@ -69,6 +79,12 @@ class MenuActivity : AppCompatActivity() {
 
         logoutButton.setOnClickListener {
             auth.signOut()
+            startActivity(Intent(this@MenuActivity, LoginActivity::class.java))
+            finish()
+        }
+
+        quitButton.setOnClickListener {
+            finish()
         }
 
         acceptInvitation!!.setOnClickListener {
@@ -105,6 +121,11 @@ class MenuActivity : AppCompatActivity() {
 
         listenerOfInvitations()
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putStringArrayList("someInvitations", someInvitations)
     }
 
     private fun checkResponse(friendsName: String){

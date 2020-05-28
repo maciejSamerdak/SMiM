@@ -38,6 +38,11 @@ class SignupActivity : AppCompatActivity() {
         inputUsername = findViewById<View>(R.id.friendsName) as EditText
         inputPassword = findViewById<View>(R.id.password) as EditText
         btnResetPassword = findViewById<View>(R.id.btn_reset_password) as Button
+        if (savedInstanceState != null){
+            inputEmail!!.setText(savedInstanceState.getString("inputEmail"))
+            inputUsername!!.setText(savedInstanceState.getString("inputUsername"))
+            inputPassword!!.setText(savedInstanceState.getString("inputPassword"))
+        }
 
         btnResetPassword!!.setOnClickListener { startActivity(Intent(this@SignupActivity, ResetPasswordActivity::class.java)) }
 
@@ -102,5 +107,12 @@ class SignupActivity : AppCompatActivity() {
                     }
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("inputEmail", inputEmail?.text.toString())
+        outState.putString("inputUsername", inputUsername?.text.toString())
+        outState.putString("inputPassword", inputPassword?.text.toString())
     }
 }
