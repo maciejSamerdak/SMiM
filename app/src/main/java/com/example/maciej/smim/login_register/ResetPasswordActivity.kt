@@ -19,10 +19,13 @@ class ResetPasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password)
-        inputEmail = findViewById<View>(R.id.friendsName) as EditText
+        inputEmail = findViewById<View>(R.id.email) as EditText
         btnReset = findViewById<View>(R.id.btn_reset_password) as Button
         btnBack = findViewById<View>(R.id.btn_back) as Button
         auth = FirebaseAuth.getInstance()
+        if (savedInstanceState != null){
+            inputEmail!!.setText(savedInstanceState.getString("inputEmail"))
+        }
         btnBack!!.setOnClickListener { finish() }
         btnReset!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
@@ -53,5 +56,10 @@ class ResetPasswordActivity : AppCompatActivity() {
                     }
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("inputEmail", inputEmail?.text.toString())
     }
 }

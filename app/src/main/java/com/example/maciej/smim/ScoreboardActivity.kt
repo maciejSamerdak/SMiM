@@ -20,6 +20,7 @@ class ScoreboardActivity : AppCompatActivity()  {
     private var listOfTextViews: MutableList<MutableList<TextView>> = mutableListOf<MutableList<TextView>>()
     private var rowsNumber: Int = 0
     private lateinit var ref: DatabaseReference
+    private var fontSize: Float = 20F
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scoreboard)
@@ -31,6 +32,10 @@ class ScoreboardActivity : AppCompatActivity()  {
         listOfTextViews[0].add(findViewById(R.id.winsNumber))
         listOfTextViews[0].add(findViewById(R.id.drawsNumber))
         listOfTextViews[0].add(findViewById(R.id.losesNumber))
+        listOfTextViews[0][0].textSize = fontSize
+        listOfTextViews[0][1].textSize = fontSize
+        listOfTextViews[0][2].textSize = fontSize
+        listOfTextViews[0][3].textSize = fontSize
         listOfTextViews[0][0].text = "Player"
         listOfTextViews[0][1].text = "Wins"
         listOfTextViews[0][2].text = "Draws"
@@ -52,6 +57,10 @@ class ScoreboardActivity : AppCompatActivity()  {
                 var i: Int = rowsNumber
                 for (child in dataSnapshot.children){
                     listOfChildren.add(child)
+                    listOfTextViews[i][0].textSize = fontSize
+                    listOfTextViews[i][1].textSize = fontSize
+                    listOfTextViews[i][2].textSize = fontSize
+                    listOfTextViews[i][3].textSize = fontSize
                     listOfTextViews[i][0].text = child.child("name").value.toString()
                     listOfTextViews[i][1].text = child.child("wins").value.toString()
                     listOfTextViews[i][2].text = child.child("draws").value.toString()
