@@ -1,4 +1,4 @@
-package com.example.maciej.smim.login_register
+package com.example.maciej.smim
 
 
 import android.view.View
@@ -10,11 +10,8 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
-import com.example.maciej.smim.HotseatGameActivity
-import com.example.maciej.smim.R
 import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Rule

@@ -1,4 +1,4 @@
-package com.example.maciej.smim.login_register
+package com.example.maciej.smim
 
 
 import android.view.View
@@ -10,11 +10,8 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
-import com.example.maciej.smim.HotseatGameActivity
-import com.example.maciej.smim.R
 import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Rule
@@ -41,7 +38,7 @@ class UpdateScoreTest {
                             2
                         )
                     ),
-                    0
+                    11
                 ),
                 isDisplayed()
             )
@@ -76,7 +73,7 @@ class UpdateScoreTest {
                             2
                         )
                     ),
-                    1
+                    12
                 ),
                 isDisplayed()
             )
@@ -111,7 +108,7 @@ class UpdateScoreTest {
                             2
                         )
                     ),
-                    5
+                    20
                 ),
                 isDisplayed()
             )
@@ -146,7 +143,7 @@ class UpdateScoreTest {
                             2
                         )
                     ),
-                    7
+                    1
                 ),
                 isDisplayed()
             )
@@ -181,7 +178,7 @@ class UpdateScoreTest {
                             2
                         )
                     ),
-                    10
+                    21
                 ),
                 isDisplayed()
             )
@@ -216,7 +213,7 @@ class UpdateScoreTest {
                             2
                         )
                     ),
-                    11
+                    23
                 ),
                 isDisplayed()
             )
@@ -251,7 +248,7 @@ class UpdateScoreTest {
                             2
                         )
                     ),
-                    15
+                    30
                 ),
                 isDisplayed()
             )
@@ -286,7 +283,7 @@ class UpdateScoreTest {
                             2
                         )
                     ),
-                    16
+                    34
                 ),
                 isDisplayed()
             )
@@ -321,7 +318,7 @@ class UpdateScoreTest {
                             2
                         )
                     ),
-                    20
+                    40
                 ),
                 isDisplayed()
             )
@@ -346,9 +343,44 @@ class UpdateScoreTest {
         )
         appCompatButton11.perform(click())
 
+        val button10 = onView(
+            allOf(
+                childAtPosition(
+                    allOf(
+                        withId(R.id.board),
+                        childAtPosition(
+                            withId(R.id.main_layout),
+                            2
+                        )
+                    ),
+                    45
+                ),
+                isDisplayed()
+            )
+        )
+        button10.perform(click())
+
+        val appCompatButton12 = onView(
+            allOf(
+                withId(R.id.confirm), withText("Confirm move"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.main_layout),
+                        childAtPosition(
+                            withId(android.R.id.content),
+                            0
+                        )
+                    ),
+                    3
+                ),
+                isDisplayed()
+            )
+        )
+        appCompatButton12.perform(click())
+
         val textView = onView(
             allOf(
-                withId(R.id.player_1_score), withText("0"),
+                withId(R.id.player_1_score), withText("1"),
                 childAtPosition(
                     childAtPosition(
                         withId(R.id.main_layout),
@@ -359,11 +391,11 @@ class UpdateScoreTest {
                 isDisplayed()
             )
         )
-        textView.check(matches(withText("0")))
+        textView.check(matches(withText("1")))
 
         val textView2 = onView(
             allOf(
-                withId(R.id.player_2_score), withText("1"),
+                withId(R.id.player_2_score), withText("0"),
                 childAtPosition(
                     childAtPosition(
                         withId(R.id.main_layout),
@@ -374,7 +406,7 @@ class UpdateScoreTest {
                 isDisplayed()
             )
         )
-        textView2.check(matches(withText("1")))
+        textView2.check(matches(withText("0")))
     }
 
     private fun childAtPosition(
