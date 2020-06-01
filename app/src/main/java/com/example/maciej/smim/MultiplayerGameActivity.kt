@@ -1,5 +1,6 @@
 package com.example.maciej.smim
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -27,19 +28,17 @@ class MultiplayerGameActivity : AppCompatActivity() {
     private lateinit var refCurrentGame : DatabaseReference
     private lateinit var username2: String
     private var playerScoreboard: Array<Int> = Array(3) {0}
-    private var lostGame: Boolean = false
-    private var initializingMultiplayer: Boolean = true
     private var playerNumber by Delegates.notNull<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initViewAndDB()
+        initViewAndDB(savedInstanceState)
         getScoreboard()
 
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         val fieldPixelSize = displayMetrics.widthPixels / board.columnCount
-        val markPixelSize = fieldPixelSize/4.5f
+        val markPixelSize = fieldPixelSize/7.5f
 
         for ( x in 0 until board.columnCount * board.rowCount) {
             val field = Button(this)
@@ -53,9 +52,17 @@ class MultiplayerGameActivity : AppCompatActivity() {
                 placeMark(field, x)
             }
         }
+        arrayToBoard()
 
-        if(playerNumber == 1)
+        if((playerNumber == 1 && !game.isPlayerOneTurn) || (playerNumber == 2 && game.isPlayerOneTurn)){
             freeze()
+            confirmationButton.isEnabled = false
+            confirmationButton.isClickable = false
+        }
+        else{
+            unfreeze()
+        }
+
         //place mark which was added by another player
         refCurrentGame.child("move").addValueEventListener(object: ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
@@ -88,10 +95,21 @@ class MultiplayerGameActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Your turn.", Toast.LENGTH_SHORT
                     ).show()
                     unfreeze()
+                    game.switchTurn()
                 }
             }
             override fun onCancelled(p0: DatabaseError) {}
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        for (i in 0 until board.rowCount){
+            outState.putStringArray(i.toString(), game.fields[i])
+        }
+        outState.putBoolean("isPlayerOneTurn", game.isPlayerOneTurn)
+        outState.putInt("scoreCount0", game.scoreCount[0])
+        outState.putInt("scoreCount1", game.scoreCount[1])
     }
 
     private fun placeMark(field: Button, index: Int){
@@ -149,6 +167,20 @@ class MultiplayerGameActivity : AppCompatActivity() {
             }
         }
         return fields
+    }
+
+    private fun arrayToBoard(){
+        for(i in 0 until board.rowCount){
+            for(j in 0 until board.columnCount){
+                if (game.fields[i][j] == "O"){
+                    (board.getChildAt(i*board.rowCount+j) as Button).setTextColor(Color.BLUE)
+                }
+                else if(game.fields[i][j] == "X"){
+                    (board.getChildAt(i*board.rowCount+j) as Button).setTextColor(Color.RED)
+                }
+                (board.getChildAt(i*board.rowCount+j) as Button).text = game.fields[i][j]
+            }
+        }
     }
 
     private fun resetBoardView(){
@@ -218,7 +250,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
         refCurrentGame.child("score").setValue(game.scoreCount[playerNumber-1])
     }
 
-    private fun initViewAndDB(){
+    private fun initViewAndDB(savedInstanceState: Bundle?){
         setContentView(R.layout.activity_multiplayer_game)
 
         player = findViewById(R.id.player)
@@ -229,16 +261,28 @@ class MultiplayerGameActivity : AppCompatActivity() {
         board = findViewById(R.id.board)
 
         game = Game(board.rowCount,board.columnCount)
+        if (savedInstanceState != null){
+            for (i in 0 until board.rowCount){
+                game.fields[i] = savedInstanceState.getStringArray(i.toString())
+            }
+            game.isPlayerOneTurn = savedInstanceState.getBoolean("isPlayerOneTurn")
+            game.scoreCount[0] = savedInstanceState.getInt("scoreCount0")
+            game.scoreCount[1] = savedInstanceState.getInt("scoreCount1")
+        }
         if (currentUserName != null) {
             refCurrentGame = db.getReference("users").child(currentUserName).child("currentGame")
+        }
+        if (currentUserName != null && savedInstanceState == null) {
             refCurrentGame.removeValue()
         }
         val whichPlayerTurn: Int = if(game.isPlayerOneTurn){
             1
         } else
             2
-        refCurrentGame.child("move").child("whichPlayerTurn").setValue(whichPlayerTurn)
-        refCurrentGame.child("score").setValue(0)
+        if(savedInstanceState == null) {
+            refCurrentGame.child("move").child("whichPlayerTurn").setValue(whichPlayerTurn)
+            refCurrentGame.child("score").setValue(0)
+        }
         refreshView()
         changeButtonState(confirmationButton)
         val extras = intent.extras

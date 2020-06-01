@@ -52,21 +52,33 @@
                 android:textSize="24sp" />
     </LinearLayout>
 
-    <GridLayout
-            android:id="@+id/board"
+    <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="10"
-            android:rowCount="10">
+            android:layout_height="match_parent">
 
-    </GridLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-    <Button
-            android:id="@+id/confirm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="confirmMove"
-            android:text="@string/confirmation" />
+            <GridLayout
+                    android:id="@+id/board"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="10"
+                    android:rowCount="10">
+
+            </GridLayout>
+
+            <Button
+                    android:id="@+id/confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="confirmMove"
+                    android:text="@string/confirmation" />
+
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

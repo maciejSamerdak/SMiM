@@ -42,6 +42,10 @@ class LoginActivity : AppCompatActivity() {
         btnLogin = findViewById<View>(R.id.btn_login) as Button
         btnReset = findViewById<View>(R.id.btn_reset_password) as Button
 
+        if (savedInstanceState != null){
+            inputEmail!!.setText(savedInstanceState.getString("inputEmail"))
+            inputPassword!!.setText(savedInstanceState.getString("inputPassword"))
+        }
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance()
 
@@ -89,5 +93,11 @@ class LoginActivity : AppCompatActivity() {
                     }
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("inputEmail", inputEmail?.text.toString())
+        outState.putString("inputPassword", inputPassword?.text.toString())
     }
 }

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MenuActivity">
+
+    <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="-171dp"
+            tools:layout_editor_absoluteY="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <Button
+                    android:id="@+id/multiplayerButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="30dp"
+                    android:text="New multiplayer game"
+                    app:layout_constraintBottom_toTopOf="@+id/friendsName"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+            <EditText
+                    android:id="@+id/friendsName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:ems="10"
+                    android:hint="Name"
+                    android:inputType="textPersonName"
+                    app:layout_constraintBottom_toTopOf="@+id/hotseatButton"
+                    app:layout_constraintStart_toStartOf="@+id/multiplayerButton"
+                    app:layout_constraintTop_toBottomOf="@+id/multiplayerButton" />
+
+            <Button
+                    android:id="@+id/hotseatButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="New hotseat game"
+                    app:layout_constraintBottom_toTopOf="@+id/scoreboardButton"
+                    app:layout_constraintStart_toStartOf="@id/multiplayerButton"
+                    app:layout_constraintTop_toBottomOf="@+id/friendsName" />
+
+            <Button
+                    android:id="@+id/scoreboardButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Scoreboard"
+                    app:layout_constraintBottom_toTopOf="@+id/logoutButton"
+                    app:layout_constraintStart_toStartOf="@+id/hotseatButton"
+                    app:layout_constraintTop_toBottomOf="@+id/hotseatButton" />
+
+            <Button
+                    android:id="@+id/logoutButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Log out"
+                    app:layout_constraintBottom_toTopOf="@+id/quitButton"
+                    app:layout_constraintStart_toStartOf="@+id/scoreboardButton"
+                    app:layout_constraintTop_toBottomOf="@+id/scoreboardButton" />
+
+            <Button
+                    android:id="@+id/quitButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="QUIT"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/logoutButton"
+                    app:layout_constraintTop_toBottomOf="@+id/logoutButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <LinearLayout
+            android:id="@+id/invitationView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+
+        <TextView
+                android:id="@+id/textView"
+                android:layout_width="82dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="invites you to the game"
+                android:textSize="16sp" />
+
+        <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text=" invites You to the game" />
+
+        <ImageButton
+                android:id="@+id/cancelInvitation"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/ic_delete" />
+
+        <ImageButton
+                android:id="@+id/acceptInvitation"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/ic_input_add" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
