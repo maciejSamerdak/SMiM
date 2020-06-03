@@ -72,7 +72,7 @@ class GameUnitTest {
     @Parameters(method = "test_checkFields_Parameters")
     fun test_checkFields(numberOfButton: Int, fields: Array<Array<String>>, expectedResult: Boolean){
         game.refreshFields(fields)
-        assertEquals(game.checkFields(numberOfButton, 3), expectedResult)
+        assertEquals(game.checkFields(numberOfButton, 2), expectedResult)
     }
 
     @SuppressWarnings("unused")
@@ -101,11 +101,57 @@ class GameUnitTest {
 
     @SuppressWarnings("unused")
     fun test_checkFields_Parameters() = arrayOf(
-        arrayOf(8, arrayOf(arrayOf("O", "X", ""), arrayOf("", "O", "X"), arrayOf("", "", "O")), true),
-        arrayOf(6, arrayOf(arrayOf("", "X", "O"), arrayOf("", "O", "X"), arrayOf("O", "", "")), true),
-        arrayOf(2, arrayOf(arrayOf("", "X", "O"), arrayOf("", "X", "O"), arrayOf("", "", "O")), true),
-        arrayOf(7, arrayOf(arrayOf("", "O", "X"), arrayOf("", "O", "X"), arrayOf("", "O", "")), true),
-        arrayOf(0, arrayOf(arrayOf("O", "X", "O"), arrayOf("O", "X", "X"), arrayOf("O", "O", "X")), true),
-        arrayOf(4, arrayOf(arrayOf("O", "X", "X"), arrayOf("X", "O", "O"), arrayOf("X", "O", "X")), false)
+        arrayOf(44,
+                arrayOf(
+                    arrayOf("O", "X", "", "", "", "", "", "", "", ""),
+                    arrayOf("", "O", "X", "", "", "", "", "", "", ""),
+                    arrayOf("", "", "O", "X", "", "", "", "", "", ""),
+                    arrayOf("", "", "", "O", "X", "", "", "", "", ""),
+                    arrayOf("", "", "", "", "O", "", "", "", "", ""),
+                    arrayOf("", "", "", "", "", "", "", "", "", ""),
+                    arrayOf("", "", "", "", "", "", "", "", "", ""),
+                    arrayOf("", "", "", "", "", "", "", "", "", ""),
+                    arrayOf("", "", "", "", "", "", "", "", "", ""),
+                    arrayOf("", "", "", "", "", "", "", "", "", "")),
+                true),
+        arrayOf(15,
+            arrayOf(
+                arrayOf("", "", "", "", "", "", "", "", "", ""),
+                arrayOf("", "O", "O", "O", "O", "O", "", "", "", ""),
+                arrayOf("", "X", "X", "X", "X", "", "", "", "", ""),
+                arrayOf("", "", "", "", "", "", "", "", "", ""),
+                arrayOf("", "", "", "", "", "", "", "", "", ""),
+                arrayOf("", "", "", "", "", "", "", "", "", ""),
+                arrayOf("", "", "", "", "", "", "", "", "", ""),
+                arrayOf("", "", "", "", "", "", "", "", "", ""),
+                arrayOf("", "", "", "", "", "", "", "", "", ""),
+                arrayOf("", "", "", "", "", "", "", "", "", "")),
+            true),
+        arrayOf(51,
+            arrayOf(
+                arrayOf("", "", "", "", "", "", "", "", "", ""),
+                arrayOf("", "O", "", "", "", "", "", "", "", ""),
+                arrayOf("", "O", "X", "X", "X", "X", "", "", "", ""),
+                arrayOf("", "O", "", "", "", "", "", "", "", ""),
+                arrayOf("", "O", "", "", "", "", "", "", "", ""),
+                arrayOf("", "O", "", "", "", "", "", "", "", ""),
+                arrayOf("", "", "", "", "", "", "", "", "", ""),
+                arrayOf("", "", "", "", "", "", "", "", "", ""),
+                arrayOf("", "", "", "", "", "", "", "", "", ""),
+                arrayOf("", "", "", "", "", "", "", "", "", "")),
+            true),
+        arrayOf(99,
+            arrayOf(
+                arrayOf("O", "X", "O", "X", "O", "X", "O", "X", "O", "X"),
+                arrayOf("O", "X", "O", "X", "O", "X", "O", "X", "O", "X"),
+                arrayOf("O", "X", "O", "X", "O", "X", "O", "X", "O", "X"),
+                arrayOf("O", "X", "O", "X", "O", "X", "O", "X", "O", "X"),
+                arrayOf("X", "O", "X", "O", "X", "O", "X", "O", "X", "O"),
+                arrayOf("X", "O", "X", "O", "X", "O", "X", "O", "X", "O"),
+                arrayOf("X", "O", "X", "O", "X", "O", "X", "O", "X", "O"),
+                arrayOf("X", "O", "X", "O", "X", "O", "X", "O", "X", "O"),
+                arrayOf("O", "X", "O", "X", "O", "X", "O", "X", "O", "X"),
+                arrayOf("O", "X", "O", "X", "O", "X", "O", "X", "O", "X")),
+            false)
     )
 }
