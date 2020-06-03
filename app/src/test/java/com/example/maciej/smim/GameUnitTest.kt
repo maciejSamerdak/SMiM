@@ -72,7 +72,7 @@ class GameUnitTest {
     @Parameters(method = "test_checkFields_Parameters")
     fun test_checkFields(numberOfButton: Int, fields: Array<Array<String>>, expectedResult: Boolean){
         game.refreshFields(fields)
-        assertEquals(game.checkFields(numberOfButton, 3), expectedResult)
+        assertEquals(game.checkFields(numberOfButton, -1,3), expectedResult)
     }
 
     @SuppressWarnings("unused")
