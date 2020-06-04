@@ -12,7 +12,7 @@ import com.example.maciej.smim.users.UserService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import java.util.ArrayList
+import java.util.*
 
 
 class MenuActivity : AppCompatActivity() {
@@ -26,6 +26,7 @@ class MenuActivity : AppCompatActivity() {
     private  var cancelInvitation:ImageButton? = null
     private var invitingPerson: TextView? = null
     private var someInvitations: ArrayList<String> = arrayListOf<String>()
+    private var checkResponseListener: ArrayList<ValueEventListener> = arrayListOf<ValueEventListener>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,7 +131,7 @@ class MenuActivity : AppCompatActivity() {
 
     private fun checkResponse(friendsName: String){
         if (currentUserName != null) {
-            db.getReference("responses")
+            checkResponseListener.add(db.getReference("responses")
                 .child(currentUserName)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -154,11 +155,21 @@ class MenuActivity : AppCompatActivity() {
                                 db.getReference("responses")
                                     .child(currentUserName).removeValue()
                             }
+                            for (i in someInvitations.indices){
+                                if (someInvitations[i] == friendsName){
+                                    db.getReference("responses")
+                                        .child(currentUserName).removeEventListener(checkResponseListener[i])
+                                    someInvitations.removeAt(i)
+                                    checkResponseListener.removeAt(i)
+                                }
+
+                            }
+
                         }
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {}
-                })
+                }))
         }
     }
 
