@@ -11,7 +11,10 @@ import android.widget.Toast
 import com.example.maciej.smim.HotseatGameActivity
 import com.example.maciej.smim.MenuActivity
 import com.example.maciej.smim.R
+import com.example.maciej.smim.users.User
+import com.example.maciej.smim.users.UserService
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 
 
 class LoginActivity : AppCompatActivity() {
@@ -21,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
     private var btnSignup: Button? = null
     private var btnLogin: Button? = null
     private var btnReset: Button? = null
+    private var userService = UserService()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -87,6 +91,10 @@ class LoginActivity : AppCompatActivity() {
                         } else {
                             val intent =
                                 Intent(this@LoginActivity, MenuActivity::class.java)
+                            val user = userService.findUserByEmail(email)
+                            val profileUpdates = UserProfileChangeRequest.Builder()
+                                .setDisplayName(user!!.name).build()
+                            auth.currentUser?.updateProfile(profileUpdates)
                             startActivity(intent)
                             finish()
                         }
