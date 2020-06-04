@@ -151,8 +151,12 @@ class MultiplayerGameActivity : AppCompatActivity() {
                         override fun onCancelled(p0: DatabaseError) {}
                     })
                 }
-
-                currentPlayerNumberView.text = if ((p0.child("move").child("whichPlayerTurn").value as Long).toInt() == 1) "1" else "2"
+                if (((p0.child("move").child("whichPlayerTurn").value as Long).toInt() == -1)) {
+                    Toast.makeText(applicationContext,String.format("%s has left the game", username2),Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                else
+                    currentPlayerNumberView.text = if ((p0.child("move").child("whichPlayerTurn").value as Long).toInt() == 1) "1" else "2"
             }
 
             override fun onCancelled(p0: DatabaseError) {}
@@ -217,13 +221,13 @@ class MultiplayerGameActivity : AppCompatActivity() {
         button.isClickable = !button.isClickable
     }
 
-    private fun switchTurn(){
+    private fun switchTurn(end: Boolean=false){
         refCurrentGame.child("move").child("whichPlayerTurn").addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
                 if((p0.value as Long).toInt() == 1){
                     val move = Move()
                     move.index = lastPickedField
-                    move.whichPlayerTurn = 2
+                    move.whichPlayerTurn = if( end ) -1 else 2
                     refCurrentGame.child("move").setValue(move)
                     db.getReference("users").child(username2).child("currentGame").child("move").setValue(move)
                     game.isPlayerOneTurn = false;
@@ -233,7 +237,7 @@ class MultiplayerGameActivity : AppCompatActivity() {
                 else{
                     val move = Move()
                     move.index = lastPickedField
-                    move.whichPlayerTurn = 1
+                    move.whichPlayerTurn = if( end ) -1 else 1
                     refCurrentGame.child("move").setValue(move)
                     db.getReference("users").child(username2).child("currentGame").child("move").setValue(move)
                     game.isPlayerOneTurn = true
@@ -318,5 +322,10 @@ class MultiplayerGameActivity : AppCompatActivity() {
     class Move{
         var whichPlayerTurn: Int = 0
         var index: Int = 0
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        switchTurn(end=true)
     }
 }
